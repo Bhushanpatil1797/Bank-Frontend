@@ -18,23 +18,16 @@ function SuccessPopup({ data }) {
         boxShadow: "0 32px 80px rgba(0,0,0,0.3)",
         animation: "popIn 0.45s cubic-bezier(.22,1,.36,1)",
       }}>
-
-        {/* Top dark navy banner */}
         <div style={{
           background: "linear-gradient(135deg, #0d1b3e 0%, #1a2f5e 50%, #0f2460 100%)",
-          padding: "36px 32px 32px",
-          textAlign: "center",
-          position: "relative",
-          overflow: "hidden",
+          padding: "36px 32px 32px", textAlign: "center",
+          position: "relative", overflow: "hidden",
         }}>
           <div style={{ position: "absolute", top: -40, right: -40, width: 160, height: 160, borderRadius: "50%", background: "rgba(255,255,255,0.04)" }} />
           <div style={{ position: "absolute", bottom: -30, left: -30, width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.03)" }} />
-
-          {/* Simple green checkmark — centered */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, position: "relative", zIndex: 1 }}>
             <CheckCircle size={52} color="#4ade80" strokeWidth={1.8} style={{ filter: "drop-shadow(0 0 12px rgba(74,222,128,0.4))" }} />
           </div>
-
           <p style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 8, position: "relative", zIndex: 1 }}>
             Account Opened Successfully
           </p>
@@ -45,24 +38,11 @@ function SuccessPopup({ data }) {
             Your bank account is now active and ready to use.
           </p>
         </div>
-
-        {/* Account details — light section */}
         <div style={{ padding: "24px 28px", background: "#f8f9fc" }}>
-
-          {/* Account number — no icon */}
-          <div style={{
-            background: "#fff", border: "1.5px solid #e2e8f0",
-            borderRadius: 14, padding: "14px 18px", marginBottom: 12,
-          }}>
-            <p style={{ fontSize: 10, fontWeight: 600, color: "#94a3b8", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>
-              Account Number
-            </p>
-            <p style={{ fontSize: 22, fontWeight: 700, color: "#0d1b3e", fontFamily: "monospace", letterSpacing: 3 }}>
-              {data.account_number}
-            </p>
+          <div style={{ background: "#fff", border: "1.5px solid #e2e8f0", borderRadius: 14, padding: "14px 18px", marginBottom: 12 }}>
+            <p style={{ fontSize: 10, fontWeight: 600, color: "#94a3b8", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>Account Number</p>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#0d1b3e", fontFamily: "monospace", letterSpacing: 3 }}>{data.account_number}</p>
           </div>
-
-          {/* IFSC + Type row */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div style={{ background: "#fff", border: "1.5px solid #e2e8f0", borderRadius: 12, padding: "12px 14px" }}>
               <p style={{ fontSize: 10, fontWeight: 600, color: "#94a3b8", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>IFSC Code</p>
@@ -73,14 +53,124 @@ function SuccessPopup({ data }) {
               <p style={{ fontSize: 14, fontWeight: 600, color: "#1e293b" }}>{data.account_type}</p>
             </div>
           </div>
+        </div>
+      </div>
+      <style>{`@keyframes popIn { from{opacity:0;transform:scale(0.88) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }`}</style>
+    </div>
+  );
+}
 
+/* ── SIGNATURE BOX + TYPE POPUP ── */
+function SignatureBox({ name }) {
+  const displayName          = name?.trim() || "Your Name";
+  const [savedSig, setSavedSig]   = useState("");   // saved typed name
+  const [showModal, setShowModal] = useState(false);
+  const [typedName, setTypedName] = useState("");   // live input in modal
+
+  // Pre-fill modal input with displayName when opening
+  const openModal = () => { setTypedName(savedSig || displayName); setShowModal(true); };
+  const saveSig   = () => { if (typedName.trim()) { setSavedSig(typedName.trim()); } setShowModal(false); };
+  const cancel    = () => setShowModal(false);
+
+  const shownName = savedSig || displayName;
+
+  return (
+    <>
+      {/* ── Signature box (same look, clickable) ── */}
+      <div className="flex flex-col items-end gap-1">
+        <p className="text-xs text-gray-400 tracking-wide uppercase font-medium">Authorized Signature</p>
+        <div
+          onClick={openModal}
+          className="border border-gray-200 rounded-xl bg-gray-50 px-5 py-3 flex flex-col items-center gap-1 min-w-[200px] cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all"
+          title="Click to type your signature"
+        >
+          <svg viewBox="0 0 260 70" className="w-52 h-14" xmlns="http://www.w3.org/2000/svg">
+            <style>{`@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');`}</style>
+            <text x="10" y="48"
+              fontFamily="'Dancing Script','Brush Script MT',cursive"
+              fontSize="26" fill="#1e3a8a" fontWeight="700"
+              style={{ letterSpacing: "1px" }}>
+              {shownName}
+            </text>
+            <path d="M10 56 Q130 60 250 54" stroke="#1e3a8a" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.5" />
+          </svg>
+          <p className="text-[10px] text-gray-400 tracking-widest uppercase mt-0.5">
+            {savedSig ? "Click to edit" : shownName}
+          </p>
         </div>
       </div>
 
-      <style>{`
-        @keyframes popIn { from{opacity:0;transform:scale(0.88) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
-      `}</style>
-    </div>
+      {/* ── Type signature popup ── */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-5 w-full max-w-sm shadow-2xl">
+            <h3 className="text-sm font-semibold text-blue-900 mb-1">Type Your Signature</h3>
+            
+
+            {/* Live cursive preview */}
+            <div className="border border-gray-200 rounded-xl bg-gray-50 px-4 py-2 mb-3 flex flex-col items-center min-h-[72px] justify-center">
+              <svg viewBox="0 0 300 60" className="w-full h-14" xmlns="http://www.w3.org/2000/svg">
+                <style>{`@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');`}</style>
+                <text x="10" y="44"
+                  fontFamily="'Dancing Script','Brush Script MT',cursive"
+                  fontSize="28" fill={typedName.trim() ? "#1e3a8a" : "#cbd5e1"}
+                  fontWeight="700" style={{ letterSpacing: "1px" }}>
+                  {typedName.trim() || "Your signature preview..."}
+                </text>
+                {typedName.trim() && (
+                  <path d="M10 52 Q150 56 290 50" stroke="#1e3a8a" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.4" />
+                )}
+              </svg>
+            </div>
+
+            {/* Text input */}
+            <input
+              type="text"
+              value={typedName}
+              onChange={e => setTypedName(e.target.value)}
+              placeholder="Type your full name..."
+              autoFocus
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none mb-3"
+            />
+
+            <div className="flex gap-2">
+              <button onClick={cancel}
+                className="flex-1 py-2 
+                  bg-red-600
+                  text-white
+                  font-semibold
+                  rounded-xl
+                  py-3.5
+                  flex items-center
+                  justify-center
+                  gap-2
+                  transition-all
+                  transform
+                  active:scale-[0.98]
+                  shadow-lg">
+                Cancel
+              </button>
+              <button onClick={saveSig}
+                className="flex-1 py-2  bg-[linear-gradient(180deg,#1e3a7b_0%,#152d68_60%,#0f1f4d_100%)]
+                  hover:bg-[#5b4ec2]
+                  text-white
+                  font-semibold
+                  rounded-xl
+                  py-3.5
+                  flex items-center
+                  justify-center
+                  gap-2
+                  transition-all
+                  transform
+                  active:scale-[0.98]
+                  shadow-lg">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -96,16 +186,10 @@ export default function OpenAccountPage() {
   });
 
   const [successData, setSuccessData] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [savedSignature, setSavedSignature] = useState(null);
-  const [showSignatureModal, setShowSignatureModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState({ show: false, type: "", msg: "" });
+  const [photo, setPhoto]             = useState(null);
+  const [loading, setLoading]         = useState(false);
+  const [alert, setAlert]             = useState({ show: false, type: "", msg: "" });
 
-  const canvasRef = useRef(null);
-  const isDrawing = useRef(false);
-
-  // Pre-fill from localStorage
   useEffect(() => {
     try {
       const user = JSON.parse(localStorage.getItem("payzen_user") || "{}");
@@ -119,18 +203,6 @@ export default function OpenAccountPage() {
       }));
     } catch { }
   }, []);
-
-  // Signature canvas setup
-  useEffect(() => {
-    if (showSignatureModal && canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      ctx.strokeStyle = "#1d4ed8";
-      ctx.lineWidth = 2.2;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-    }
-  }, [showSignatureModal]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -152,7 +224,6 @@ export default function OpenAccountPage() {
     if (type === "error") setTimeout(() => setAlert({ show: false }), 4000);
   };
 
-  // Form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.agree) { showAlertMsg("error", "Please accept the Terms & Conditions"); return; }
@@ -188,31 +259,6 @@ export default function OpenAccountPage() {
       showAlertMsg("error", res.data.message || "Something went wrong. Please try again.");
     }
   };
-
-  // Signature drawing
-  const getPos = (e, canvas) => {
-    const rect = canvas.getBoundingClientRect();
-    const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
-    if (e.touches) return { x: (e.touches[0].clientX - rect.left) * sx, y: (e.touches[0].clientY - rect.top) * sy };
-    return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
-  };
-  const startDrawing = (e) => {
-    e.preventDefault();
-    const p = getPos(e, canvasRef.current);
-    canvasRef.current.getContext("2d").beginPath();
-    canvasRef.current.getContext("2d").moveTo(p.x, p.y);
-    isDrawing.current = true;
-  };
-  const draw = (e) => {
-    e.preventDefault();
-    if (!isDrawing.current) return;
-    const p = getPos(e, canvasRef.current);
-    canvasRef.current.getContext("2d").lineTo(p.x, p.y);
-    canvasRef.current.getContext("2d").stroke();
-  };
-  const stopDrawing = () => { isDrawing.current = false; };
-  const clearCanvas = () => canvasRef.current.getContext("2d").clearRect(0, 0, 460, 180);
-  const saveSignature = () => { setSavedSignature(canvasRef.current.toDataURL("image/png")); setShowSignatureModal(false); };
 
   return (
     <>
@@ -351,61 +397,34 @@ export default function OpenAccountPage() {
               </p>
             </div>
 
-            {/* Signature */}
-            <button type="button" onClick={() => setShowSignatureModal(true)}
-              className="flex items-center gap-2 px-5 py-2 bg-white border border-blue-700 text-blue-800 rounded-full text-sm font-medium hover:bg-blue-50 transition-all">
-              <PenLine size={15} />
-              {savedSignature ? "Edit Signature" : "Add Signature"}
-            </button>
+            {/* Submit row — button left, signature right */}
+            <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
+              <button type="submit" disabled={loading}
+                className="w-full md:w-40
+                  bg-[linear-gradient(180deg,#1e3a7b_0%,#152d68_60%,#0f1f4d_100%)]
+                  hover:bg-[#5b4ec2]
+                  text-white
+                  font-semibold
+                  rounded-xl
+                  py-3.5
+                  flex items-center
+                  justify-center
+                  gap-2
+                  transition-all
+                  transform
+                  active:scale-[0.98]
+                  shadow-lg">
+                {loading
+                  ? <><Loader size={18} className="animate-spin" /> Opening Account...</>
+                  : "Open Account"}
+              </button>
 
-            {savedSignature && (
-              <div className="border rounded-xl p-3 bg-gray-50 inline-block">
-                <p className="text-xs text-gray-500 mb-1">Your Signature:</p>
-                <img src={savedSignature} alt="signature" className="h-14" />
-              </div>
-            )}
-
-            {/* Submit */}
-            <button type="submit" disabled={loading}
-              className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold
-                rounded-xl py-3 flex items-center justify-center gap-2
-                disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-lg">
-              {loading
-                ? <><Loader size={18} className="animate-spin" /> Opening Account...</>
-                : "Open Account"}
-            </button>
+              <SignatureBox name={formData.bank_holder_name} />
+            </div>
 
           </form>
         </div>
       </div>
-
-      {/* Signature Modal */}
-      {showSignatureModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 className="text-lg font-semibold text-blue-900 mb-4">Draw Your Signature</h3>
-            <canvas ref={canvasRef} width={460} height={180}
-              className="border-2 border-dashed border-blue-300 rounded-xl w-full cursor-crosshair bg-blue-50"
-              onMouseDown={startDrawing} onMouseMove={draw}
-              onMouseUp={stopDrawing} onMouseLeave={stopDrawing}
-              onTouchStart={startDrawing} onTouchMove={draw} onTouchEnd={stopDrawing} />
-            <div className="flex gap-3 mt-4">
-              <button onClick={clearCanvas}
-                className="flex-1 py-2 border border-gray-300 rounded-xl text-gray-600 text-sm hover:bg-gray-50">
-                Clear
-              </button>
-              <button onClick={() => setShowSignatureModal(false)}
-                className="flex-1 py-2 border border-red-300 rounded-xl text-red-500 text-sm hover:bg-red-50">
-                Cancel
-              </button>
-              <button onClick={saveSignature}
-                className="flex-1 py-2 bg-blue-900 rounded-xl text-white text-sm font-semibold hover:bg-blue-800">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
