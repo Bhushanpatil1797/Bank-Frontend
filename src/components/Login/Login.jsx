@@ -8,21 +8,19 @@ import { loginUser } from "../../utils/apiServices";
 ═══════════════════════════════════════ */
 function Toast({ message, type, onClose }) {
   useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
+
+  const isSuccess = type === "success";
   return (
-    <div style={{
-      position: "fixed", top: 24, right: 24, zIndex: 50,
-      display: "flex", alignItems: "center", gap: 12,
-      padding: "14px 20px", borderRadius: 16,
-      border: `1px solid ${type === "success" ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`,
-      background: type === "success" ? "rgba(52,211,153,0.1)" : "rgba(248,113,113,0.1)",
-      color: type === "success" ? "#34d399" : "#f87171",
-      backdropFilter: "blur(20px)",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
-      minWidth: 280, maxWidth: 360,
-    }}>
-      {type === "success" ? <CheckCircle size={20} style={{ flexShrink: 0 }} /> : <XCircle size={20} style={{ flexShrink: 0 }} />}
-      <p style={{ fontSize: 13, fontWeight: 500, flex: 1, margin: 0 }}>{message}</p>
-      <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", opacity: 0.6, display: "flex", padding: 0 }}>
+    <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border backdrop-blur-xl min-w-[280px] max-w-[360px] shadow-[0_20px_60px_rgba(0,0,0,0.4)] ${
+      isSuccess
+        ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-400"
+        : "border-red-400/30 bg-red-400/10 text-red-400"
+    }`}>
+      {isSuccess
+        ? <CheckCircle size={20} className="shrink-0" />
+        : <XCircle size={20} className="shrink-0" />}
+      <p className="text-[13px] font-medium flex-1 m-0">{message}</p>
+      <button onClick={onClose} className="bg-transparent border-none cursor-pointer text-inherit opacity-60 flex p-0 hover:opacity-100 transition-opacity">
         <X size={16} />
       </button>
     </div>
@@ -34,25 +32,11 @@ function Toast({ message, type, onClose }) {
 ═══════════════════════════════════════ */
 function GridBackground() {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #03071e 0%, #05103a 40%, #0a0a2e 70%, #03071e 100%)" }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: `
-          radial-gradient(ellipse 70% 50% at 20% 50%, rgba(29,78,216,0.22) 0%, transparent 60%),
-          radial-gradient(ellipse 50% 70% at 80% 20%, rgba(109,40,217,0.18) 0%, transparent 55%),
-          radial-gradient(ellipse 40% 40% at 60% 85%, rgba(6,182,212,0.1) 0%, transparent 50%)`
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "radial-gradient(circle, rgba(99,102,241,0.18) 1px, transparent 1px)",
-        backgroundSize: "32px 32px"
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,50,255,0.015) 2px, rgba(0,50,255,0.015) 4px)",
-        mixBlendMode: "screen"
-      }} />
+    <div className="fixed inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#03071e_0%,#05103a_40%,#0a0a2e_70%,#03071e_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_50%,rgba(29,78,216,0.22)_0%,transparent_60%),radial-gradient(ellipse_50%_70%_at_80%_20%,rgba(109,40,217,0.18)_0%,transparent_55%),radial-gradient(ellipse_40%_40%_at_60%_85%,rgba(6,182,212,0.1)_0%,transparent_50%)]" />
+      <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(99,102,241,0.18) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+      <div className="absolute inset-0 mix-blend-screen" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,50,255,0.015) 2px, rgba(0,50,255,0.015) 4px)" }} />
     </div>
   );
 }
@@ -62,22 +46,21 @@ function GridBackground() {
 ═══════════════════════════════════════ */
 function Particles() {
   const pts = [
-    { s:3, t:"8%",  l:"5%",  c:"#60a5fa", d:"3.2s", dl:"0s" },
-    { s:2, t:"20%", l:"88%", c:"#a78bfa", d:"2.8s", dl:"0.7s" },
-    { s:4, t:"65%", l:"8%",  c:"#38bdf8", d:"3.5s", dl:"1.2s" },
-    { s:2, t:"82%", l:"80%", c:"#818cf8", d:"2.3s", dl:"0.4s" },
-    { s:3, t:"42%", l:"2%",  c:"#22d3ee", d:"3.8s", dl:"1.8s" },
-    { s:2, t:"10%", l:"50%", c:"#a78bfa", d:"2.6s", dl:"0.9s" },
-    { s:3, t:"92%", l:"35%", c:"#60a5fa", d:"3.1s", dl:"1.5s" },
-    { s:2, t:"30%", l:"92%", c:"#22d3ee", d:"2.9s", dl:"0.2s" },
-    { s:4, t:"55%", l:"96%", c:"#38bdf8", d:"3.3s", dl:"2.1s" },
-    { s:2, t:"75%", l:"52%", c:"#c084fc", d:"2.7s", dl:"0.6s" },
+    { s:3, t:"8%",  l:"5%",  c:"#60a5fa", d:"3.2s", dl:"0s"   },
+    { s:2, t:"20%", l:"88%", c:"#a78bfa", d:"2.8s", dl:"0.7s"  },
+    { s:4, t:"65%", l:"8%",  c:"#38bdf8", d:"3.5s", dl:"1.2s"  },
+    { s:2, t:"82%", l:"80%", c:"#818cf8", d:"2.3s", dl:"0.4s"  },
+    { s:3, t:"42%", l:"2%",  c:"#22d3ee", d:"3.8s", dl:"1.8s"  },
+    { s:2, t:"10%", l:"50%", c:"#a78bfa", d:"2.6s", dl:"0.9s"  },
+    { s:3, t:"92%", l:"35%", c:"#60a5fa", d:"3.1s", dl:"1.5s"  },
+    { s:2, t:"30%", l:"92%", c:"#22d3ee", d:"2.9s", dl:"0.2s"  },
+    { s:4, t:"55%", l:"96%", c:"#38bdf8", d:"3.3s", dl:"2.1s"  },
+    { s:2, t:"75%", l:"52%", c:"#c084fc", d:"2.7s", dl:"0.6s"  },
   ];
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none", overflow: "hidden" }}>
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
       {pts.map((p, i) => (
-        <div key={i} style={{
-          position: "absolute", borderRadius: "50%",
+        <div key={i} className="absolute rounded-full" style={{
           width: p.s, height: p.s, top: p.t, left: p.l,
           background: p.c, boxShadow: `0 0 ${p.s * 3}px ${p.c}`,
           animation: `ptFloat ${p.d} ease-in-out infinite ${p.dl}`,
@@ -92,45 +75,35 @@ function Particles() {
 ═══════════════════════════════════════ */
 function BrandPanel() {
   return (
-    <div style={{
-      display: "none", flex: 1,
-      flexDirection: "column", alignItems: "center", justifyContent: "center",
-      position: "relative", padding: "64px 48px", overflow: "hidden",
-    }} className="lg-brand-panel">
-      <div style={{
-        position: "absolute", width: 480, height: 480,
-        borderRadius: "50%", top: "50%", left: "50%",
-        transform: "translate(-50%,-50%)",
-        background: "radial-gradient(circle, rgba(37,99,235,0.2) 0%, rgba(109,40,217,0.12) 40%, transparent 70%)",
-        filter: "blur(40px)", animation: "ambPulse 6s ease-in-out infinite",
-      }} />
+    <div className="hidden lg:flex flex-1 flex-col items-center justify-center relative px-12 py-16 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute w-[480px] h-[480px] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-[40px]"
+        style={{ background: "radial-gradient(circle, rgba(37,99,235,0.2) 0%, rgba(109,40,217,0.12) 40%, transparent 70%)", animation: "ambPulse 6s ease-in-out infinite" }}
+      />
+      {/* Orbit rings */}
       {[
         { sz: 360, spd: 24, rev: false, dot: 9, dc: "#38bdf8", bc: "rgba(56,189,248,0.12)" },
         { sz: 270, spd: 17, rev: true,  dot: 7, dc: "#a78bfa", bc: "rgba(167,139,250,0.12)" },
         { sz: 185, spd: 11, rev: false, dot: 5, dc: "#22d3ee", bc: "rgba(34,211,238,0.15)" },
       ].map((r, i) => (
-        <div key={i} style={{
-          position: "absolute", borderRadius: "50%",
-          width: r.sz, height: r.sz, top: "50%", left: "50%",
+        <div key={i} className="absolute rounded-full top-1/2 left-1/2 pointer-events-none" style={{
+          width: r.sz, height: r.sz,
           border: `1px solid ${r.bc}`,
           animation: `orbitSpin ${r.spd}s linear infinite ${r.rev ? "reverse" : "normal"}`,
-          pointerEvents: "none",
         }}>
-          <div style={{
-            position: "absolute", borderRadius: "50%",
+          <div className="absolute rounded-full" style={{
             width: r.dot, height: r.dot,
             background: r.dc, boxShadow: `0 0 14px ${r.dc}`,
             top: `calc(-${r.dot / 2}px)`, left: "50%", transform: "translateX(-50%)",
           }} />
         </div>
       ))}
-      <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", animation: "logoIn 1s cubic-bezier(.16,1,.3,1) both .3s" }}>
-        <div style={{ position: "relative", marginBottom: 28, animation: "hexFloat 5s ease-in-out infinite" }}>
-          <div style={{
-            position: "absolute", inset: -18, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.6) 0%, transparent 65%)",
-            filter: "blur(18px)", animation: "ambPulse 3s ease-in-out infinite",
-          }} />
+      {/* Logo + text */}
+      <div className="relative z-10 flex flex-col items-center" style={{ animation: "logoIn 1s cubic-bezier(.16,1,.3,1) both .3s" }}>
+        <div className="relative mb-7" style={{ animation: "hexFloat 5s ease-in-out infinite" }}>
+          <div className="absolute -inset-[18px] rounded-full blur-[18px]"
+            style={{ background: "radial-gradient(circle, rgba(37,99,235,0.6) 0%, transparent 65%)", animation: "ambPulse 3s ease-in-out infinite" }}
+          />
           <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
             <path d="M50 4 L90 26 L90 74 L50 96 L10 74 L10 26 Z" fill="rgba(29,78,216,0.2)" stroke="url(#hs3)" strokeWidth="1.5" />
             <path d="M50 16 L80 32 L80 68 L50 84 L20 68 L20 32 Z" fill="rgba(37,99,235,0.1)" stroke="rgba(56,189,248,0.35)" strokeWidth="1" />
@@ -140,27 +113,40 @@ function BrandPanel() {
             ))}
             <defs>
               <linearGradient id="hs3" x1="10" y1="4" x2="90" y2="96" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="rgba(56,189,248,0.9)" />
-                <stop offset="50%" stopColor="rgba(129,140,248,0.6)" />
+                <stop offset="0%"   stopColor="rgba(56,189,248,0.9)" />
+                <stop offset="50%"  stopColor="rgba(129,140,248,0.6)" />
                 <stop offset="100%" stopColor="rgba(56,189,248,0.9)" />
               </linearGradient>
               <linearGradient id="tg3" x1="0" y1="0" x2="0" y2="70" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#fff" />
+                <stop offset="0%"   stopColor="#fff" />
                 <stop offset="100%" stopColor="rgba(56,189,248,0.85)" />
               </linearGradient>
             </defs>
           </svg>
         </div>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-          <span style={{ fontFamily: "'Georgia', serif", fontSize: 62, fontWeight: 900, color: "#fff", letterSpacing: -3, lineHeight: 1, textShadow: "0 0 40px rgba(255,255,255,0.15)" }}>Pay</span>
-          <span style={{ fontFamily: "'Georgia', serif", fontSize: 62, fontWeight: 900, letterSpacing: -3, lineHeight: 1, background: "linear-gradient(135deg, #38bdf8 0%, #818cf8 45%, #38bdf8 90%)", backgroundSize: "200%", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", animation: "shimmer 3s linear infinite" }}>Zen</span>
+
+        <div className="flex items-baseline gap-1">
+          <span className="font-serif text-[62px] font-black text-white tracking-[-3px] leading-none" style={{ textShadow: "0 0 40px rgba(255,255,255,0.15)" }}>Pay</span>
+          <span className="font-serif text-[62px] font-black tracking-[-3px] leading-none bg-clip-text text-transparent bg-[length:200%]"
+            style={{ backgroundImage: "linear-gradient(135deg, #38bdf8 0%, #818cf8 45%, #38bdf8 90%)", animation: "shimmer 3s linear infinite" }}>
+            Zen
+          </span>
         </div>
-        <div style={{ height: 3, borderRadius: 99, margin: "10px auto 20px", background: "linear-gradient(90deg, #2563eb, #38bdf8, #818cf8, #38bdf8, #2563eb)", backgroundSize: "200%", animation: "ulGrow .9s cubic-bezier(.22,1,.36,1) forwards 1s, shimmer 3s linear infinite 1.5s", width: 0 }} />
-        <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(180,210,255,0.35)", marginBottom: 28, opacity: 0, animation: "fadeUp .7s ease both 1.2s" }}>Private Banking</p>
-        <p style={{ fontSize: 14, fontWeight: 300, textAlign: "center", lineHeight: 1.8, maxWidth: 240, color: "rgba(180,210,255,0.5)", opacity: 0, animation: "fadeUp .7s ease both 1.4s" }}>
+
+        <div className="h-[3px] rounded-full my-2.5 mx-auto bg-[length:200%]"
+          style={{ background: "linear-gradient(90deg, #2563eb, #38bdf8, #818cf8, #38bdf8, #2563eb)", animation: "ulGrow .9s cubic-bezier(.22,1,.36,1) forwards 1s, shimmer 3s linear infinite 1.5s", width: 0 }}
+        />
+
+        <p className="text-[11px] font-medium tracking-[0.3em] uppercase text-[rgba(180,210,255,0.35)] mb-7 opacity-0"
+          style={{ animation: "fadeUp .7s ease both 1.2s" }}>Private Banking</p>
+
+        <p className="text-sm font-light text-center leading-[1.8] max-w-[240px] text-[rgba(180,210,255,0.5)] opacity-0"
+          style={{ animation: "fadeUp .7s ease both 1.4s" }}>
           Secure, intelligent banking <br />always at your fingertips.
         </p>
-        <p style={{ fontSize: 10, fontWeight: 500, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(100,160,255,0.35)", whiteSpace: "nowrap", marginTop: 14, opacity: 0, animation: "fadeUp .7s ease both 1.5s" }}>Secure · Smart · Banking</p>
+
+        <p className="text-[10px] font-medium tracking-[0.28em] uppercase text-[rgba(100,160,255,0.35)] whitespace-nowrap mt-3.5 opacity-0"
+          style={{ animation: "fadeUp .7s ease both 1.5s" }}>Secure · Smart · Banking</p>
       </div>
     </div>
   );
@@ -171,16 +157,17 @@ function BrandPanel() {
 ═══════════════════════════════════════ */
 function MobileLogo() {
   return (
-    <div className="lg-hide-logo" style={{ flexDirection: "column", alignItems: "center", marginBottom: 20 }}>
-      <svg width="46" height="46" viewBox="0 0 100 100" fill="none" style={{ marginBottom: 6 }}>
+    <div className="flex lg:hidden flex-col items-center mb-5">
+      <svg width="46" height="46" viewBox="0 0 100 100" fill="none" className="mb-1.5">
         <path d="M50 4 L90 26 L90 74 L50 96 L10 74 L10 26 Z" fill="rgba(29,78,216,0.25)" stroke="rgba(56,189,248,0.8)" strokeWidth="2" />
         <text x="50" y="63" fontFamily="Georgia,serif" fontSize="34" fontWeight="900" fill="white" textAnchor="middle">P</text>
       </svg>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 2 }}>
-        <span style={{ fontFamily: "'Georgia', serif", fontSize: 24, fontWeight: 900, color: "#fff", letterSpacing: -1 }}>Pay</span>
-        <span style={{ fontFamily: "'Georgia', serif", fontSize: 24, fontWeight: 900, letterSpacing: -1, background: "linear-gradient(135deg,#38bdf8,#818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Zen</span>
+      <div className="flex items-baseline gap-0.5">
+        <span className="font-serif text-2xl font-black text-white tracking-[-1px]">Pay</span>
+        <span className="font-serif text-2xl font-black tracking-[-1px] bg-clip-text text-transparent"
+          style={{ backgroundImage: "linear-gradient(135deg,#38bdf8,#818cf8)" }}>Zen</span>
       </div>
-      <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(180,210,255,0.35)", marginTop: 3 }}>Private Banking</p>
+      <p className="text-[9px] tracking-[0.3em] uppercase text-[rgba(180,210,255,0.35)] mt-0.5">Private Banking</p>
     </div>
   );
 }
@@ -191,12 +178,12 @@ function MobileLogo() {
 export default function LoginPage() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({ email: "", password: "", remember: false });
+  const [formData, setFormData]         = useState({ email: "", password: "", remember: false });
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [alertActive, setAlertActive] = useState(false);
-  const [shakeCard, setShakeCard] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  const [loading, setLoading]           = useState(false);
+  const [alertActive, setAlertActive]   = useState(false);
+  const [shakeCard, setShakeCard]       = useState(false);
+  const [toast, setToast]               = useState({ show: false, message: "", type: "" });
   const [focusedField, setFocusedField] = useState(null);
 
   const showToast = (msg, type) => setToast({ show: true, message: msg, type });
@@ -208,54 +195,29 @@ export default function LoginPage() {
     if (alertActive) setAlertActive(false);
   };
 
-  const playAlertSound = () => {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      if (ctx.state === "suspended") ctx.resume();
-      [{ delay: 0, freq: 960 }, { delay: 380, freq: 880 }, { delay: 760, freq: 960 }].forEach(({ delay, freq }) => {
-        setTimeout(() => {
-          const osc = ctx.createOscillator(), gain = ctx.createGain();
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.type = "sawtooth"; osc.frequency.setValueAtTime(freq, ctx.currentTime);
-          gain.gain.setValueAtTime(0, ctx.currentTime);
-          gain.gain.linearRampToValueAtTime(0.8, ctx.currentTime + 0.01);
-          gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.25);
-          osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.25);
-        }, delay);
-      });
-    } catch (err) { console.warn("[PayZen] Audio error:", err); }
-  };
-
-  const triggerRedAlert = () => {
-    setAlertActive(true); setShakeCard(true); playAlertSound();
-    setTimeout(() => setAlertActive(false), 5000);
-    setTimeout(() => setShakeCard(false), 500);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true);
     const result = await loginUser(formData.email, formData.password);
     if (!result.ok) {
       const msg = result.data?.message || "Invalid Credentials!";
-      triggerRedAlert(); showToast(msg, "error"); setLoading(false); return;
+      showToast(msg, "error"); setLoading(false); return;
     }
-    showToast("Login Successful! 🎉", "success");
+    showToast("Login Successful! ", "success");
     localStorage.setItem("payzen_user", JSON.stringify(result.data.user));
-    localStorage.setItem("token", result.data.token);
+    localStorage.setItem("payzen_token", result.data.token);
     setTimeout(() => navigate("/dashboard"), 1500);
     setLoading(false);
   };
 
-  const inputStyle = (name) => ({
-    width: "100%", boxSizing: "border-box",
-    background: alertActive ? "rgba(239,68,68,0.06)" : focusedField === name ? "rgba(99,102,241,0.08)" : "rgba(255,255,255,0.04)",
-    border: `1px solid ${alertActive ? "rgba(239,68,68,0.5)" : focusedField === name ? "rgba(99,102,241,0.6)" : "rgba(99,102,241,0.2)"}`,
-    borderRadius: 12,
-    paddingLeft: 38, paddingRight: name === "password" ? 40 : 16, paddingTop: 12, paddingBottom: 12,
-    color: "#e2e8f0", fontSize: 13, fontFamily: "inherit",
-    outline: "none", transition: "all 0.2s ease",
-  });
+  // Dynamic input classes — mirrors original inputStyle logic exactly
+  const inputClass = (name) =>
+    `w-full pl-[38px] ${name === "password" ? "pr-10" : "pr-4"} py-3 rounded-xl text-[13px] text-[#e2e8f0] outline-none transition-all duration-200 border ${
+      alertActive
+        ? "bg-red-500/[0.06] border-red-500/50"
+        : focusedField === name
+        ? "bg-indigo-500/[0.08] border-indigo-500/60"
+        : "bg-white/[0.04] border-indigo-500/20"
+    }`;
 
   return (
     <>
@@ -273,147 +235,119 @@ export default function LoginPage() {
         @keyframes spin      { to{transform:rotate(360deg)} }
         @keyframes scanPulse { 0%,100%{opacity:0} 50%{opacity:1} }
         @keyframes shakeX    { 0%,100%{transform:translateX(0)} 10%,30%,50%,70%,90%{transform:translateX(-7px)} 20%,40%,60%,80%{transform:translateX(7px)} }
-        @keyframes alertPulse { 0%,100%{opacity:0} 50%{opacity:1} }
+        @keyframes alertPulse{ 0%,100%{opacity:0} 50%{opacity:1} }
         input::placeholder { color: rgba(148,163,184,0.3); }
+        input { font-family: inherit; }
         * { box-sizing: border-box; }
-        @media (min-width: 1024px) {
-          .lg-brand-panel { display: flex !important; }
-          .lg-hide-logo   { display: none !important; }
-        }
-        @media (max-width: 1023px) {
-          .lg-hide-logo { display: flex !important; }
-          .lg-card      { padding: 24px 18px 20px !important; border-radius: 18px !important; }
-          .lg-title     { font-size: 22px !important; }
-        }
       `}</style>
 
       {toast.show && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
 
-      {alertActive && (
-        <div style={{
-          position: "fixed", top: 0, left: 0, right: 0, height: 2, zIndex: 40,
-          background: "linear-gradient(90deg, transparent, #ef4444, transparent)",
-          animation: "alertPulse 1s ease-in-out infinite",
-        }} />
-      )}
-
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden", padding: "24px 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-6"
+        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
 
         <GridBackground />
         <Particles />
 
-        <div style={{ position: "relative", zIndex: 10, display: "flex", alignItems: "center", width: "100%", maxWidth: 1100 }}>
-
+        <div className="relative z-10 flex items-center w-full max-w-[1100px]">
           <BrandPanel />
 
           {/* ════ LOGIN CARD ════ */}
-          <div style={{
-            animation: `${shakeCard ? "shakeX 0.5s ease-in-out" : "cardIn .8s cubic-bezier(.16,1,.3,1) both .1s"}`,
-            width: "100%", maxWidth: 460,
-            margin: "0 auto",
-          }}>
-            <div className="lg-card" style={{
-              borderRadius: 24,
-              background: alertActive ? "rgba(60,8,8,0.7)" : "rgba(8,16,60,0.7)",
-              border: `1px solid ${alertActive ? "rgba(239,68,68,0.35)" : "rgba(99,102,241,0.2)"}`,
-              backdropFilter: "blur(32px)",
-              boxShadow: alertActive
-                ? "0 0 0 1px rgba(255,255,255,0.03) inset, 0 24px 80px rgba(239,68,68,0.2)"
-                : "0 0 0 1px rgba(255,255,255,0.03) inset, 0 24px 80px rgba(0,0,0,0.6), 0 0 100px rgba(37,99,235,0.12)",
-              padding: "36px 36px 32px",
-              transition: "all 0.4s ease",
-            }}>
+          <div className="w-full max-w-[460px] mx-auto"
+            style={{ animation: shakeCard ? "shakeX 0.5s ease-in-out" : "cardIn .8s cubic-bezier(.16,1,.3,1) both .1s" }}>
 
-              {/* Mobile logo — only on small screens */}
+            <div className={`rounded-3xl border backdrop-blur-[32px] p-9 max-lg:p-[18px] max-lg:rounded-[18px] transition-all duration-400 ${
+              alertActive
+                ? "bg-[rgba(60,8,8,0.7)] border-red-500/35 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset,0_24px_80px_rgba(239,68,68,0.2)]"
+                : "bg-[rgba(8,16,60,0.7)] border-indigo-500/20 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset,0_24px_80px_rgba(0,0,0,0.6),0_0_100px_rgba(37,99,235,0.12)]"
+            }`}>
+
               <MobileLogo />
 
-              <div style={{ textAlign: "center", marginBottom: 28 }}>
-                <h2 className="lg-title" style={{
-                  fontSize: 26, fontWeight: 800, letterSpacing: "-0.03em", margin: 0, marginBottom: 6,
-                  color: alertActive ? "#fca5a5" : "#f1f5f9",
-                  transition: "color 0.4s ease",
-                }}>
+              {/* Heading */}
+              <div className="text-center mb-7">
+                <h2 className={`text-[26px] max-lg:text-[22px] font-extrabold tracking-[-0.03em] m-0 mb-1.5 transition-colors duration-400 ${
+                  alertActive ? "text-red-300" : "text-slate-100"
+                }`}>
                   User Login
                 </h2>
-                <p style={{ fontSize: 13, fontWeight: 400, color: "rgba(148,163,184,0.6)", margin: 0 }}>
+                <p className="text-[13px] font-normal text-[rgba(148,163,184,0.6)] m-0">
                   Access Your Banking Dashboard Safely
                 </p>
               </div>
 
               <form onSubmit={handleSubmit}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div className="flex flex-col gap-4">
 
                   {/* Email */}
                   <div>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(148,163,184,0.8)", marginBottom: 7, letterSpacing: "0.05em"}}>
-                      Email Address <span style={{ color: "#f87171" }}>*</span>
+                    <label className="block text-[11px] font-semibold text-[rgba(148,163,184,0.8)] mb-1.5 tracking-[0.05em]">
+                      Email Address <span className="text-[#f87171]">*</span>
                     </label>
-                    <div style={{ position: "relative" }}>
-                      <span style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: alertActive ? "rgba(239,68,68,0.6)" : "rgba(99,102,241,0.6)", pointerEvents: "none", display: "flex", transition: "color 0.3s" }}>
+                    <div className="relative">
+                      <span className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex transition-colors duration-300 ${
+                        alertActive ? "text-red-500/60" : "text-indigo-500/60"
+                      }`}>
                         <Mail size={14} />
                       </span>
                       <input type="email" name="email" placeholder="you@email.com"
                         value={formData.email} onChange={handleChange} required
                         onFocus={() => setFocusedField("email")} onBlur={() => setFocusedField(null)}
-                        style={inputStyle("email")} autoComplete="email" />
+                        autoComplete="email"
+                        className={inputClass("email")} />
                     </div>
                   </div>
 
                   {/* Password */}
                   <div>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(148,163,184,0.8)", marginBottom: 7, letterSpacing: "0.05em"}}>
-                      Password <span style={{ color: "#f87171" }}>*</span>
+                    <label className="block text-[11px] font-semibold text-[rgba(148,163,184,0.8)] mb-1.5 tracking-[0.05em]">
+                      Password <span className="text-[#f87171]">*</span>
                     </label>
-                    <div style={{ position: "relative" }}>
-                      <span style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: alertActive ? "rgba(239,68,68,0.6)" : "rgba(99,102,241,0.6)", pointerEvents: "none", display: "flex", transition: "color 0.3s" }}>
+                    <div className="relative">
+                      <span className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex transition-colors duration-300 ${
+                        alertActive ? "text-red-500/60" : "text-indigo-500/60"
+                      }`}>
                         <Lock size={14} />
                       </span>
                       <input type={showPassword ? "text" : "password"} name="password" placeholder="Enter password"
                         value={formData.password} onChange={handleChange} required
                         onFocus={() => setFocusedField("password")} onBlur={() => setFocusedField(null)}
-                        style={inputStyle("password")} autoComplete="current-password" />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} style={{
-                        position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-                        background: "none", border: "none", cursor: "pointer",
-                        color: "rgba(99,102,241,0.5)", display: "flex", padding: 0,
-                      }}>
-                        {showPassword ? <EyeOff size={14}/> : <Eye size={14}/>}
+                        className={inputClass("password")} />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-indigo-500/50 flex p-0 hover:text-indigo-400 transition-colors">
+                        {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                       </button>
                     </div>
                   </div>
 
                   {/* Remember + Forgot */}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 12, color: "rgba(148,163,184,0.55)" }}>
+                  <div className="flex justify-between items-center">
+                    <label className="flex items-center gap-2 cursor-pointer text-[12px] text-[rgba(148,163,184,0.55)]">
                       <input type="checkbox" name="remember" checked={formData.remember} onChange={handleChange}
-                        style={{ accentColor: "#6366f1", width: 13, height: 13 }} />
+                        className="accent-indigo-500 w-3.5 h-3.5" />
                       Remember Me
                     </label>
-                    <button type="button" onClick={() => navigate("/forgot")} style={{
-                      background: "none", border: "none", cursor: "pointer",
-                      fontSize: 12, fontWeight: 600, color: "#818cf8", fontFamily: "inherit", padding: 0,
-                    }}>
+                    <button type="button" onClick={() => navigate("/forgot")}
+                      className="bg-transparent border-none cursor-pointer text-[12px] font-semibold text-[#818cf8] hover:text-indigo-300 transition-colors p-0"
+                      style={{ fontFamily: "inherit" }}>
                       Forgot Password?
                     </button>
                   </div>
 
                   {/* Submit */}
-                  <button type="submit" disabled={loading} style={{
-                    width: "100%", marginTop: 4, padding: "14px 24px",
-                    borderRadius: 14, border: "none",
-                    background: loading ? "rgba(79,70,229,0.5)" : alertActive ? "linear-gradient(135deg,#dc2626,#b91c1c)" : "linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#4f46e5 100%)",
-                    backgroundSize: "200%",
-                    color: "#fff", fontSize: 14, fontWeight: 700, letterSpacing: "0.02em",
-                    cursor: loading ? "not-allowed" : "pointer",
-                    boxShadow: alertActive ? "0 4px 28px rgba(220,38,38,0.45)" : loading ? "none" : "0 4px 28px rgba(79,70,229,0.45), 0 0 50px rgba(124,58,237,0.2)",
-                    transition: "all 0.3s ease",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                    fontFamily: "inherit",
-                    animation: !loading && !alertActive ? "shimmer 3s linear infinite" : "none",
-                  }}>
+                  <button type="submit" disabled={loading}
+                    className={`w-full mt-1 py-3.5 px-6 rounded-[14px] border-none text-white text-sm font-bold tracking-[0.02em] transition-all duration-300 flex items-center justify-center gap-2 bg-[length:200%] ${
+                      loading
+                        ? "bg-indigo-700/50 cursor-not-allowed shadow-none"
+                        : alertActive
+                        ? "bg-[linear-gradient(135deg,#dc2626,#b91c1c)] cursor-pointer shadow-[0_4px_28px_rgba(220,38,38,0.45)]"
+                        : "bg-[linear-gradient(135deg,#4f46e5_0%,#7c3aed_50%,#4f46e5_100%)] cursor-pointer shadow-[0_4px_28px_rgba(79,70,229,0.45),0_0_50px_rgba(124,58,237,0.2)] hover:shadow-[0_6px_36px_rgba(79,70,229,0.6)]"
+                    }`}
+                    style={{ fontFamily: "inherit", animation: !loading && !alertActive ? "shimmer 3s linear infinite" : "none" }}>
                     {loading ? (
                       <>
-                        <span style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", animation: "spin 0.7s linear infinite", display: "inline-block" }} />
+                        <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white inline-block"
+                          style={{ animation: "spin 0.7s linear infinite" }} />
                         Verifying...
                       </>
                     ) : (
@@ -422,7 +356,8 @@ export default function LoginPage() {
                   </button>
 
                   {loading && (
-                    <p style={{ textAlign: "center", fontSize: 11, color: "rgba(148,163,184,0.4)", margin: 0, animation: "scanPulse 1.5s ease-in-out infinite" }}>
+                    <p className="text-center text-[11px] text-[rgba(148,163,184,0.4)] m-0"
+                      style={{ animation: "scanPulse 1.5s ease-in-out infinite" }}>
                       Verifying Secure Access...
                     </p>
                   )}
@@ -430,18 +365,19 @@ export default function LoginPage() {
                 </div>
               </form>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-                <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
-                <span style={{ fontSize: 10, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>or</span>
-                <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+              {/* Divider */}
+              <div className="flex items-center gap-3 my-5">
+                <div className="flex-1 h-px bg-white/[0.06]" />
+                <span className="text-[10px] tracking-[0.15em] text-white/20 uppercase">or</span>
+                <div className="flex-1 h-px bg-white/[0.06]" />
               </div>
 
-              <p style={{ textAlign: "center", fontSize: 13, color: "rgba(148,163,184,0.5)", margin: 0 }}>
+              {/* Register link */}
+              <p className="text-center text-[13px] text-[rgba(148,163,184,0.5)] m-0">
                 Don't have an account?{" "}
-                <button onClick={() => navigate("/registration")} style={{
-                  background: "none", border: "none", cursor: "pointer",
-                  fontWeight: 700, color: "#818cf8", fontSize: "inherit", fontFamily: "inherit", padding: 0,
-                }}>
+                <button onClick={() => navigate("/registration")}
+                  className="bg-transparent border-none cursor-pointer font-bold text-[#818cf8] hover:text-indigo-300 transition-colors text-[13px] p-0"
+                  style={{ fontFamily: "inherit" }}>
                   Register here
                 </button>
               </p>
